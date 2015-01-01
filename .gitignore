@@ -32,6 +32,7 @@ modules.builtin
 *.lzo
 *.patch
 *.gcno
+*.zip
 
 #
 # Top-level generic files
@@ -67,7 +68,7 @@ arch/*/include/generated
 # stgit generated dirs
 patches-*
 
-# quilt's files
+# quilt's fileszImage
 patches
 series
 
