@@ -23,6 +23,10 @@
 
 #define CPUFREQ_NAME_LEN 16
 
+#ifdef CONFIG_CPU_FREQ_GOV_BADASS_GPU_CONTROL
+/* Badass gpu state detection */
+extern bool gpu_busy_state;
+#endif 
 
 /*********************************************************************
  *                     CPUFREQ NOTIFIER INTERFACE                    *
@@ -110,8 +114,14 @@ struct cpufreq_policy {
 
 	struct cpufreq_real_policy	user_policy;
 
-	struct kobject		kobj;
+	struct kobject		*kobj;
 	struct completion	kobj_unregister;
+};
+
+/* contains per cpu sysfs info ./sys/devices/ssytem/cpu/cpu#/cpufreq */
+struct cpufreq_cpu_sysinfo {
+	struct cpufreq_policy *cpu_policy; /* policy for online cpu */
+	struct kobject cpu_kobj; /* per cpu kobject */
 };
 
 #define CPUFREQ_ADJUST		(0)
@@ -264,8 +274,15 @@ void cpufreq_notify_transition(struct cpufreq_freqs *freqs, unsigned int state);
 void cpufreq_notify_utilization(struct cpufreq_policy *policy,
 		unsigned int load);
 
+#ifdef CONFIG_MSM_CPUFREQ_LIMITER
+extern unsigned int limited_max_freq;
+#endif
+
 static inline void cpufreq_verify_within_limits(struct cpufreq_policy *policy, unsigned int min, unsigned int max)
 {
+#ifdef CONFIG_MSM_CPUFREQ_LIMITER
+	max = min(limited_max_freq, max);
+#endif
 	if (policy->min < min)
 		policy->min = min;
 	if (policy->max < min)
@@ -344,7 +361,6 @@ static inline unsigned int cpufreq_quick_get_max(unsigned int cpu)
 	return 0;
 }
 #endif
-
 
 
 /*********************************************************************
