@@ -10,15 +10,15 @@ sleep 1
 echo "Setting ARM Arch"
 export ARCH=arm
 echo "Setting Defconfig"
-export DEFCONFIG=find5_infinitus_defconfig
+export DEFCONFIG=cyanogenmod_x909_defconfig
 echo "Setting Date And Time For Zip File"
 export NOW=$(date +"%m-%d-%y_%H:%M")
 echo "Setting Toolchain"
-export GCC=linaro-arm-eabi-4.10
+export GCC=AK-linaro
 echo "Setting Toolchain Version"
-export VER=4.9.1-2014.06.20140614.CR83
+export VER=4.9.3-2014.12.20141230.CR83
 echo "Setting Toolchain Location"
-export TOOLCHAIN=`pwd`/../$GCC/bin/arm-eabi-
+export TOOLCHAIN=../$GCC/$VER/bin/arm-eabi-
 echo "Setting Toolchain Strip Location"
 export TSTRIP=`pwd`/../$GCC/bin/arm-linux-androideabi-strip
 echo "Setting Strip Arguments"
